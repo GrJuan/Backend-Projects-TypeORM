@@ -1,10 +1,10 @@
 {
    "type": "mysql",
-   "host": "sql9.freemysqlhosting.net",
+   "host": "us-east.connect.psdb.cloud",
    "port": 3306,
-   "username": "sql9594076",
-   "password": "S22sFpmIQK",
-   "database": "sql9594076",
+   "username": "byoklpd3r65pa0n6l93l",
+   "password": "pscale_pw_r2CQRUJtfUOG8EtDJJIyJAaDMGjp6ZAkKJ142oSwZhL",
+   "database": "backend",
    "synchronize": true,
    "logging": false,
       "entities": 
