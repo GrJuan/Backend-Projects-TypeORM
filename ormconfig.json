@@ -10,7 +10,7 @@
       "entities": 
    
    [
-      "src/entity/**/*.ts", "./public/entity/*/*.js"
+      "src/entity/**/*.ts", "./public/entity/**/*.js"
    ],
    "migrations": [
       "src/migration/**/*.ts"
