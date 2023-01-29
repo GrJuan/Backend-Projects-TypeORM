@@ -1,15 +1,5 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "./public/index.js",
-            "use": "@now/node-server"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/public/index.js"
-        }
-    ]
-}
+    "builds": [{ "src": "public/index.js", "use": "@vercel/node" }],
+    "routes": [{ "src": "/", "dest": "public/index.js" }]
+  }
