@@ -11,10 +11,10 @@
       "target": "es2017",
       "module": "commonjs",
       "moduleResolution": "node",
-      "outDir": "./build",
+      "outDir": "./public",
       "rootDir": "./src",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "sourceMap": true
+      "sourceMap": true,
    }
 }
