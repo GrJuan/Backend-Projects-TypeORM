@@ -1,14 +1,15 @@
-import { getMongoManager, getRepository } from "typeorm";
 import { Request, Response } from "express";
-import { User } from "../entity/user/User";
 import { validate } from "class-validator";
 import * as jwt from "jsonwebtoken";
-import { Project } from '../entity/projects/Project';
+import { repositorys } from '../util/repository';
+import { User } from "../entity/user/User";
+import { getRepository } from 'typeorm';
+
 require('dotenv').config();
 
 export class UserController {
-    //CONSUTAR TODOS LOS USUARIOS
-    static getAll = async (req: Request, res: Response) => {
+
+    static getAllUsers = async (req: Request, res: Response) => {
 
         const userRepository = getRepository(User);
 
@@ -30,9 +31,8 @@ export class UserController {
         }
     };
 
-    //CREAR NUEVO USUARIO
     static newUser = async (req: Request, res: Response) => {
-        const { password, email, firstName, lastName, role, dateTime, gender, country  } = req.body;
+        const { password, email, firstName, lastName, role, dateTime, gender, country, photo  } = req.body;
         const user = new User()
         let token = '';
 
@@ -47,6 +47,7 @@ export class UserController {
         user.country = country;
         user.gender = gender;
         user.role  = role;
+        user.photo = photo;
         user.activityDate = dateTime;
 
  
@@ -83,6 +84,73 @@ export class UserController {
         }
 
     };
+
+    static getUserById = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const userRepository = getRepository(User);
+        try {
+            const user = await userRepository.findOneOrFail(id, { relations: ["project"] });
+            res.send(user);
+        } catch (e) {
+            res.status(400).json({ message: 'Without result' });
+        }
+    };
+
+    static editeUser = async (req: Request, res: Response) => {
+        let user;
+        const { id } = req.params;
+        const { email, firstName, lastName, gender, country, phone, whatsapp, linkedin, github, about  } = req.body;
+
+        const userRepository = getRepository(User);
+        try {
+            user = await userRepository.findOneOrFail(id)
+        } catch (e) {
+            return res.status(400).json({ message: 'User not found!' })
+        }
+
+        user.username = firstName;
+        user.lastName = lastName;
+        user.phone = phone;
+        user.country = country;
+        user.gender = gender;
+        user.email = email;
+        user.whatsapp = whatsapp;
+        user.linkedin = linkedin;
+        user.github = github;
+        user.about = about;
+
+
+        const validationOpt = { validateError: { target: false, value: false } };
+        const errors = await validate(user, validationOpt);
+        if (errors.length > 0) {
+            return res.status(401).json({ message: errors });
+        };
+
+        //GUARDAR EL USUARIO
+        try {
+            await userRepository.save(user);
+        } catch (e) {
+            return res.status(400).json({ message: 'Username already exists' })
+        }
+        res.status(201).json({ message: 'Updated User' })
+
+    };
+
+    static deleteUser = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const userRepository = getRepository(User);
+        let user: User;
+
+        try {
+            user = await userRepository.findOneOrFail(id);
+        } catch (e) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
+        userRepository.delete(id);
+        res.status(201).json({ message: 'User Deleted' });
+    };
+
 
 }
 

@@ -6,10 +6,15 @@ import { checkJwt } from "../middlewares/jwt";
 
 const router = Router();
 
-//LEER TODOS LOS USUARIOS
-router.get('/', UserController.getAll);
+router.get('/', UserController.getAllUsers);
 
-router.post('/', UserController.newUser)
+router.post('/', UserController.newUser);
+
+router.get('/:id', UserController.getUserById);
+
+router.put('/edite/:id', UserController.editeUser);
+
+router.delete('/delete/:id', UserController.deleteUser);
 
 export default router;
 
